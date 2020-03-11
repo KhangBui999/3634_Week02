@@ -26,9 +26,9 @@ public class DetailActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
 
-        final Intent intent = getIntent();
-        final String symbol = intent.getStringExtra(MainActivity.EXTRA_MESSAGE);
-        Coin coin = Coin.searchCoin(symbol);
+        Intent intent = getIntent();
+        int position = intent.getIntExtra(MainActivity.EXTRA_MESSAGE, 0);
+        Coin coin = Coin.getCoins().get(position);
 
         coinLong = (TextView) findViewById(R.id.mCoinLong);
         coinShort = (TextView) findViewById(R.id.mCoinShort);
@@ -49,7 +49,7 @@ public class DetailActivity extends AppCompatActivity {
         search.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                search(symbol);
+                search();
             }
         });
 
@@ -67,8 +67,8 @@ public class DetailActivity extends AppCompatActivity {
         volume.setText(String.valueOf(coin.getVolume()));
     }
 
-    private void search(String query) {
-        String url = "https://www.google.com/?q="+query;
+    private void search() {
+        String url = "https://www.google.com/";
         Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
         startActivity(intent);
     }
