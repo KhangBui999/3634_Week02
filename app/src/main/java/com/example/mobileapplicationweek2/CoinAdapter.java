@@ -9,14 +9,17 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.text.NumberFormat;
 import java.util.ArrayList;
+import java.util.List;
+
+import com.example.mobileapplicationweek2.Entites.Coin;
 
 public class CoinAdapter extends RecyclerView.Adapter<CoinAdapter.CoinViewHolder> {
-    private ArrayList<Coin> mCoins;
+    private List<Coin> mCoins;
     private RecyclerViewClickListener mListener;
 
 
     //CoinAdapter Constructor
-    public CoinAdapter(ArrayList<Coin> coins, RecyclerViewClickListener listener) {
+    public CoinAdapter(List<Coin> coins, RecyclerViewClickListener listener) {
         mCoins = coins;
         mListener = listener;
     }
@@ -62,8 +65,8 @@ public class CoinAdapter extends RecyclerView.Adapter<CoinAdapter.CoinViewHolder
     public void onBindViewHolder(CoinViewHolder holder, int position) {
         Coin coin = mCoins.get(position);
         holder.name.setText(coin.getName());
-        holder.value.setText(NumberFormat.getCurrencyInstance().format(coin.getValue()));
-        holder.change.setText(coin.getChange1h() + "%");
+        holder.value.setText("$" + coin.getPriceUsd());
+        holder.change.setText(coin.getPercentChange1h() + "%");
     }
 
 

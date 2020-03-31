@@ -11,6 +11,14 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
+import com.example.mobileapplicationweek2.Entites.Coin;
+import com.example.mobileapplicationweek2.Entites.CoinLoreResponse;
+import com.google.gson.Gson;
+
+import java.util.List;
+
+import static com.example.mobileapplicationweek2.Entites.CoinLoreResponse.json;
+
 public class MainActivity extends AppCompatActivity {
     public static final String EXTRA_MESSAGE = "au.edu.unsw.infs3634.beers.MESSAGE";
     private boolean wideMode;
@@ -50,7 +58,11 @@ public class MainActivity extends AppCompatActivity {
             }
         };
 
-        mAdapter = new CoinAdapter(Coin.getCoins(), listener);
+        Gson gson = new Gson();
+        CoinLoreResponse response = gson.fromJson(json, CoinLoreResponse.class);
+        List<Coin> list = response.getData();
+
+        mAdapter = new CoinAdapter(list, listener);
         mRecyclerView.setAdapter(mAdapter);
 
     }

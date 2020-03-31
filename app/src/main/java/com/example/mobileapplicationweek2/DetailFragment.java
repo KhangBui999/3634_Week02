@@ -12,6 +12,14 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.mobileapplicationweek2.Entites.Coin;
+import com.example.mobileapplicationweek2.Entites.CoinLoreResponse;
+import com.google.gson.Gson;
+
+import java.util.List;
+
+import static com.example.mobileapplicationweek2.Entites.CoinLoreResponse.json;
+
 public class DetailFragment extends Fragment {
 
     private TextView coinLong;
@@ -35,7 +43,11 @@ public class DetailFragment extends Fragment {
         View v = inflater.inflate(R.layout.fragment_detail, container, false);
         Bundle arguments = getArguments();
         int position = arguments.getInt("POSITION");
-        Coin coin = Coin.getCoins().get(position);
+
+        Gson gson = new Gson();
+        CoinLoreResponse response = gson.fromJson(json, CoinLoreResponse.class);
+        List<Coin> list = response.getData();
+        final Coin coin = list.get(position);
 
         coinLong = v.findViewById(R.id.mCoinLong);
         coinShort = v.findViewById(R.id.mCoinShort);
@@ -49,12 +61,12 @@ public class DetailFragment extends Fragment {
 
         coinLong.setText(coin.getName());
         coinShort.setText(coin.getSymbol());
-        value.setText("$" + coin.getValue());
-        hourChange.setText(coin.getChange1h() + " %");
-        dayChange.setText(coin.getChange24h() + " %");
-        weekChange.setText(coin.getChange7d() + " %");
-        market.setText("$" + String.format("%,.2f", coin.getMarketcap()));
-        volume.setText("$" + String.format("%,.2f", coin.getVolume()));
+        value.setText("$" + coin.getPriceUsd());
+        hourChange.setText(coin.getPercentChange1h() + " %");
+        dayChange.setText(coin.getPercentChange24h() + " %");
+        weekChange.setText(coin.getPercentChange7d() + " %");
+        market.setText("$" + String.format("%,.2f", Double.parseDouble(coin.getMarketCapUsd())));
+        volume.setText("$" + String.format("%,.2f", coin.getVolume24()));
 
         search.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -65,7 +77,7 @@ public class DetailFragment extends Fragment {
         search.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                search();
+                search(coin.getName());
             }
         });
 
@@ -73,7 +85,7 @@ public class DetailFragment extends Fragment {
     }
 
 
-    private void search() {
+    private void search(String query) {
         String url = "https://www.google.com/";
         Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
         startActivity(intent);
