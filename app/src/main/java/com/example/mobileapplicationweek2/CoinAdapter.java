@@ -7,8 +7,6 @@ import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
-import java.text.NumberFormat;
-import java.util.ArrayList;
 import java.util.List;
 
 import com.example.mobileapplicationweek2.Entites.Coin;
@@ -51,7 +49,6 @@ public class CoinAdapter extends RecyclerView.Adapter<CoinAdapter.CoinViewHolder
         public void onClick(View view) { mListener.onClick(view, getAdapterPosition()); }
     }
 
-
     //Creates CoinViewHolder (layout object) and sets it
     @Override
     public CoinAdapter.CoinViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -72,5 +69,12 @@ public class CoinAdapter extends RecyclerView.Adapter<CoinAdapter.CoinViewHolder
 
     //Needed for RecyclerView
     @Override
-    public int getItemCount() { return mCoins.size(); }
+    public int getItemCount() {
+        return mCoins.size();
+    }
+
+    public void setCoins(List<Coin> coins) {
+        mCoins.clear();
+        mCoins.addAll(coins);
+    }
 }

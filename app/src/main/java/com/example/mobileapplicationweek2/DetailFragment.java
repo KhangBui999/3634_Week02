@@ -86,7 +86,7 @@ public class DetailFragment extends Fragment {
 
 
     private void search(String query) {
-        String url = "https://www.google.com/";
+        String url = "https://www.google.com/?q="+query;
         Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
         startActivity(intent);
     }

@@ -14,24 +14,6 @@ public class CoinLoreResponse {
     @Expose
     private Info info;
 
-//    /**
-//     * No args constructor for use in serialization
-//     *
-//     */
-//    public CoinLoreResponse() {
-//    }
-//
-//    /**
-//     *
-//     * @param data
-//     * @param info
-//     */
-//    public CoinLoreResponse(List<Coin> data, Info info) {
-//        super();
-//        this.data = data;
-//        this.info = info;
-//    }
-
     public List<Coin> getData() {
         return data;
     }
