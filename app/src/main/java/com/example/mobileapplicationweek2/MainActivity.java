@@ -64,6 +64,7 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         };
+
         //Sets an initial adapter and toast message (not activated)
         mAdapter = new CoinAdapter(new ArrayList<Coin>(), listener);
         Toast toast = Toast.makeText(this, "List Updated!", Toast.LENGTH_LONG*3);
@@ -99,6 +100,7 @@ public class MainActivity extends AppCompatActivity {
         } catch (Exception e) {
             e.printStackTrace();
         }
+
     }
 
     private boolean setWideMode() {
