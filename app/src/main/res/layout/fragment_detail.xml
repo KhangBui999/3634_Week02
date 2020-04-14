@@ -54,15 +54,13 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:paddingTop="20dp"
-                    android:text="TextView"
                     android:textSize="24sp"
                     android:textStyle="bold" />
 
                 <TextView
                     android:id="@+id/mCoinShort"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="TextView" />
+                    android:layout_height="wrap_content" />
             </LinearLayout>
         </LinearLayout>
 
@@ -147,7 +145,6 @@
         android:layout_marginTop="32dp"
         android:layout_marginEnd="165dp"
         android:layout_marginRight="165dp"
-        android:text="TextView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
 
@@ -156,7 +153,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
-        android:text="TextView"
         app:layout_constraintStart_toStartOf="@+id/mValue"
         app:layout_constraintTop_toBottomOf="@id/mValue" />
 
@@ -165,7 +161,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
-        android:text="TextView"
         app:layout_constraintStart_toStartOf="@+id/mHourChange"
         app:layout_constraintTop_toBottomOf="@+id/mHourChange" />
 
@@ -174,7 +169,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
-        android:text="TextView"
         app:layout_constraintStart_toStartOf="@+id/mDayChange"
         app:layout_constraintTop_toBottomOf="@+id/mDayChange" />
 
@@ -183,7 +177,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
-        android:text="TextView"
         app:layout_constraintStart_toStartOf="@+id/mWeekChange"
         app:layout_constraintTop_toBottomOf="@+id/mWeekChange" />
 
@@ -192,7 +185,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
-        android:text="TextView"
         app:layout_constraintStart_toStartOf="@+id/mMarket"
         app:layout_constraintTop_toBottomOf="@+id/mMarket" />
 </androidx.constraintlayout.widget.ConstraintLayout>
