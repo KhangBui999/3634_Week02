@@ -6,6 +6,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.room.Room;
 
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -26,10 +27,13 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class MainActivity extends AppCompatActivity {
+
     public static final String EXTRA_MESSAGE = "au.edu.unsw.infs3634.beers.MESSAGE";
     private RecyclerView mRecyclerView;
     private CoinAdapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
+    private CoinDatabase mDb;
+    private List<Coin> coins;
     private Toast toast;
 
     @Override
@@ -47,20 +51,21 @@ public class MainActivity extends AppCompatActivity {
         CoinAdapter.RecyclerViewClickListener listener = new CoinAdapter.RecyclerViewClickListener() {
             @Override
             public void onClick(View view, int position) {
+                String coinId = coins.get(position).getId();
                 if (findViewById(R.id.detailContainer)  !=  null) {
                     //Wide mode fragment
                     FragmentManager myManager = getSupportFragmentManager();
                     FragmentTransaction myTransaction = myManager.beginTransaction();
                     Fragment myFragment = new DetailFragment();
                     Bundle arguments = new Bundle();
-                    arguments.putInt("POSITION", position);
+                    arguments.putString("COIN_ID", coinId);
                     myFragment.setArguments(arguments);
                     myTransaction.replace(R.id.detailContainer, myFragment);
                     myTransaction.commit();
                 }
                 else {
                     //Handheld mode launches a detail activity
-                    launchDetailActivity(position);
+                    launchDetailActivity(coinId);
                 }
             }
         };
@@ -69,11 +74,16 @@ public class MainActivity extends AppCompatActivity {
         mAdapter = new CoinAdapter(new ArrayList<Coin>(), listener);
         mRecyclerView.setAdapter(mAdapter);
 
+        //Sets CoinDatabase object
+        mDb = Room.databaseBuilder(getApplicationContext(), CoinDatabase.class, "coins-database")
+                .build();
+
         //Set default toast message
         toast = Toast.makeText(this, "List Updated!", Toast.LENGTH_SHORT);
 
-        //Executes API call
+        //Executes AsyncTasks
         new CallCoinAPI().execute();
+        new CallCoinDatabase().execute();
     }
 
     public class CallCoinAPI extends AsyncTask<Void, Void, List<Coin>> {
@@ -87,7 +97,10 @@ public class MainActivity extends AppCompatActivity {
                 CoinService service = retrofit.create(CoinService.class);
                 Call<CoinLoreResponse> coinsCall = service.getCoins();
                 Response<CoinLoreResponse> coinsResponse = coinsCall.execute();
-                return coinsResponse.body().getData();
+                coins = coinsResponse.body().getData();
+                mDb.coinDao().deleteAll(mDb.coinDao().getCoins().toArray(new Coin[mDb.coinDao().getCoins().size()]));
+                mDb.coinDao().insertAll(coins.toArray(new Coin[coins.size()]));
+                return coins;
             }
             catch (IOException e) {
                 e.printStackTrace();
@@ -98,13 +111,25 @@ public class MainActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(List<Coin> coins) {
             mAdapter.setCoins(coins);
+        }
+    }
+
+    public class CallCoinDatabase extends AsyncTask<Void, Void, List<Coin>> {
+        @Override
+        protected List<Coin> doInBackground(Void... voids) {
+            return mDb.coinDao().getCoins();
+        }
+
+        @Override
+        protected void onPostExecute(List<Coin> coins) {
+            mAdapter.setCoins(coins);
             toast.show(); //activates toast for UI message
         }
     }
 
-    private void launchDetailActivity(int message) {
+    private void launchDetailActivity(String message) {
         Intent intent = new Intent(this, DetailActivity.class);
-        intent.putExtra(EXTRA_MESSAGE, message);
+        intent.putExtra("COIN_ID", message);
         startActivity(intent);
     }
 }

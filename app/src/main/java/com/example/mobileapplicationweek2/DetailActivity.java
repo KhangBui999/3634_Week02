@@ -16,13 +16,13 @@ public class DetailActivity extends AppCompatActivity {
         setContentView(R.layout.activity_detail);
 
         Intent intent = getIntent();
-        int position = intent.getIntExtra(MainActivity.EXTRA_MESSAGE, 0);
+        String id = intent.getStringExtra("COIN_ID");
 
         FragmentManager myManager = getSupportFragmentManager();
         FragmentTransaction myTransaction = myManager.beginTransaction();
         Fragment myFragment = new DetailFragment();
         Bundle arguments = new Bundle();
-        arguments.putInt("POSITION", position);
+        arguments.putString("COIN_ID", id);
         myFragment.setArguments(arguments);
         myTransaction.replace(R.id.scrollView2, myFragment);
         myTransaction.commit();

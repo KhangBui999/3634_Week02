@@ -37,9 +37,9 @@
 
             <ImageView
                 android:id="@+id/imageView2"
-                android:layout_width="3dp"
-                android:layout_height="match_parent"
-                android:layout_gravity="right"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="left|center_vertical"
                 android:layout_weight="1"
                 app:srcCompat="@mipmap/ic_launcher_round" />
 

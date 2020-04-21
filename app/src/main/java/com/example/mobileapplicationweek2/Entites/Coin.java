@@ -1,10 +1,17 @@
 package com.example.mobileapplicationweek2.Entites;
 
+import androidx.annotation.NonNull;
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+@Entity
 public class Coin {
 
+    @PrimaryKey
+    @NonNull
     @SerializedName("id")
     @Expose
     private String id;
@@ -54,30 +61,6 @@ public class Coin {
     @Expose
     private String msupply;
 
-    /**
-     * No args constructor for use in serialization
-     */
-    public Coin() {
-    }
-
-    /**
-     * @param symbol
-     * @param volume24a
-     * @param priceUsd
-     * @param priceBtc
-     * @param volume24
-     * @param percentChange24h
-     * @param percentChange7d
-     * @param marketCapUsd
-     * @param msupply
-     * @param tsupply
-     * @param name
-     * @param nameid
-     * @param rank
-     * @param csupply
-     * @param id
-     * @param percentChange1h
-     */
     public Coin(String id, String symbol, String name, String nameid, int rank, String priceUsd, String percentChange24h, String percentChange1h, String percentChange7d, String priceBtc, String marketCapUsd, double volume24, double volume24a, String csupply, String tsupply, String msupply) {
         super();
         this.id = id;

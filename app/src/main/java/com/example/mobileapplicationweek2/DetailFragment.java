@@ -6,6 +6,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.room.Room;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,16 +14,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.example.mobileapplicationweek2.Entites.Coin;
-import com.example.mobileapplicationweek2.Entites.CoinLoreResponse;
-
-import java.io.IOException;
-import java.util.List;
-
-import retrofit2.Call;
-import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
 
 public class DetailFragment extends Fragment {
 
@@ -35,8 +28,10 @@ public class DetailFragment extends Fragment {
     private TextView market;
     private TextView volume;
     private ImageView search;
+    private ImageView image;
 
-    private int position;
+    private CoinDatabase mDb;
+    private String coinId;
 
 
     public DetailFragment() {
@@ -48,7 +43,8 @@ public class DetailFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_detail, container, false);
         Bundle arguments = getArguments();
-        position = arguments.getInt("POSITION");
+
+        coinId = arguments.getString("COIN_ID");
 
         coinLong = v.findViewById(R.id.mCoinLong);
         coinShort = v.findViewById(R.id.mCoinShort);
@@ -59,36 +55,29 @@ public class DetailFragment extends Fragment {
         market = v.findViewById(R.id.mMarket);
         volume = v.findViewById(R.id.mVolume);
         search = v.findViewById(R.id.mSearch);
+        image = v.findViewById(R.id.imageView2);
+
+        mDb = Room.databaseBuilder(getActivity().getApplicationContext(), CoinDatabase.class,
+                "coins-database").build();
 
         new LoadCoinUI().execute();
 
         return v;
     }
 
-    public class LoadCoinUI extends AsyncTask<Void, Void, List<Coin>> {
+    public class LoadCoinUI extends AsyncTask<Void, Void, Coin> {
         @Override
-        protected List<Coin> doInBackground(Void... voids) {
-            try{
-                Retrofit retrofit = new Retrofit.Builder()
-                        .baseUrl("https://api.coinlore.net/")
-                        .addConverterFactory(GsonConverterFactory.create())
-                        .build();
-                CoinService service = retrofit.create(CoinService.class);
-                Call<CoinLoreResponse> coinsCall = service.getCoins();
-                Response<CoinLoreResponse> coinsResponse = coinsCall.execute();
-                return coinsResponse.body().getData();
-            }
-            catch (IOException e) {
-                e.printStackTrace();
-                return null;
-            }
+        protected Coin doInBackground(Void... voids) {
+            return mDb.coinDao().getCoin(coinId);
         }
 
         @Override
-        protected void onPostExecute(List<Coin> coins) {
-            //Updates coin list
+        protected void onPostExecute(Coin coin) {
             try {
-                Coin coin = coins.get(position);
+                String url = "https://c1.coinlore.com/img/25x25/"+coin.getNameid()+".png";
+                Glide.with(getActivity())
+                        .load(url)
+                        .into(image);
                 coinLong.setText(coin.getName());
                 coinShort.setText(coin.getSymbol());
                 value.setText("$" + coin.getPriceUsd());
@@ -111,7 +100,7 @@ public class DetailFragment extends Fragment {
     }
 
     private void search(String query) {
-        String url = "https://www.google.com/?q="+query;
+        String url = "https://www.google.com/search?q="+query;
         Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
         startActivity(intent);
     }
